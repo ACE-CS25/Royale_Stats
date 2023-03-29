@@ -6,8 +6,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -22,9 +22,6 @@ public class AppMain {
         String playerTag = reader.getPlayerTag();
         String code = reader.getAuthCode();
 
-        System.out.println(playerTag);
-        System.out.println(code);
-
         //create default httpClient
         HttpClient httpClient = HttpClients.createDefault();
         //create http request method object, passing URI as parameter.
@@ -38,9 +35,6 @@ public class AppMain {
         //convert entity to json encoded string
         String strResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
 
-        JSONArray battles = new JSONArray(strResponse);
-        JSONObject obj = battles.getJSONObject(0);
-        System.out.println(response.getStatusLine());
         System.out.println(strResponse);
 
     }
