@@ -1,0 +1,3 @@
+This file serves as a mapping between goal numbers (branches) and their description. 
+
+"goal_1" : Get JSON file of a clash royale card from API and convert it into a java object.  

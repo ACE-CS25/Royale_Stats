@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.logging.log4j.LogManager;
@@ -6,8 +8,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -17,6 +17,7 @@ public class AppMain {
 
     public static void main(String [] args) throws IOException {
 
+        LOGGER.info("Beginning of main...");
         FileReader reader = new FileReader();
 
         String playerTag = reader.getPlayerTag();
@@ -25,7 +26,7 @@ public class AppMain {
         //create default httpClient
         HttpClient httpClient = HttpClients.createDefault();
         //create http request method object, passing URI as parameter.
-        HttpGet httpGet = new HttpGet("https://api.clashroyale.com/v1/players/" + playerTag +"/battlelog");
+        HttpGet httpGet = new HttpGet("https://api.clashroyale.com/v1/players/" + playerTag);
         //add header to http request for authorization
         httpGet.addHeader("Authorization", code);
         //execute method request and save response into response object
@@ -35,6 +36,12 @@ public class AppMain {
         //convert entity to json encoded string
         String strResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
 
+        JsonNode node = json.parse(strResponse);
+        try {
+            System.out.println("Json object: " + node.get("player").asText());
+        } catch (NullPointerException e){
+            System.out.println("Nothing found.");
+        }
         System.out.println(strResponse);
 
     }
